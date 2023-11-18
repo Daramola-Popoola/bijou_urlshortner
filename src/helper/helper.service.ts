@@ -36,4 +36,15 @@ export class HelperService {
         
         return authToken;
     }
+    
+    
+    async generateUrl(){
+        const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+        let sequence = "";
+        for(let i = 1; i<=10; i++){
+            sequence += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        
+        return sequence;
+    }
 }
