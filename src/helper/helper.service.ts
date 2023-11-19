@@ -38,7 +38,7 @@ export class HelperService {
     }
     
     
-    async generateUrl(){
+    async generateUrl(): Promise<string>{
         const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
         let sequence = "";
         for(let i = 1; i<=10; i++){
