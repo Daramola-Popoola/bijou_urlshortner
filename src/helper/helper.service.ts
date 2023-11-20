@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import {  Injectable, UnauthorizedException } from '@nestjs/common';
 import * as Bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
@@ -30,11 +30,16 @@ export class HelperService {
     }
     
     async authenticateToken(token: string): Promise<boolean | TokenPayload>{
-        const authToken: TokenPayload = await this.jwt.verifyAsync(token, {secret: this.configService.get('JWT_SECRET')});
+        try{
+            const authToken: TokenPayload = await this.jwt.verifyAsync(token, {secret: this.configService.get('JWT_SECRET')});
         
-        if(!authToken) return false;
-        
-        return authToken;
+            if(!authToken) return false;
+            return authToken;
+            
+        }catch(err){
+            throw new UnauthorizedException("sorry you cannot acccess this resource", {description: `access denied`});
+        }
+       
     }
     
     

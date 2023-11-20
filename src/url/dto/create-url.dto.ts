@@ -24,3 +24,6 @@ export class CreateUrlDto extends OmitType(UrlEntity, ['id', 'createdAt', 'updat
 
 
  export class CreateUrlPartialDto extends PickType(CreateUrlDto, ['title', 'actualUrl']){}
+ 
+ 
+ export interface IUrlModel extends UrlEntity {}

@@ -1,9 +1,10 @@
-import { ForbiddenException, Injectable, HttpException, HttpStatus, Logger } from '@nestjs/common';
+import { ForbiddenException, Injectable, HttpException, HttpStatus, Logger, NotFoundException, BadRequestException } from '@nestjs/common';
 import {Request, Response} from 'express';
-import { CreateUrlPartialDto } from './dto/create-url.dto';
+import { CreateUrlPartialDto, IUrlModel } from './dto/create-url.dto';
 import { HelperService } from 'src/helper/helper.service';
 import { TokenPayload } from 'src/helper/helper.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { UpdateUrlDto } from './dto/update-url.dto';
 
 @Injectable()
 export class UrlService {
@@ -37,5 +38,62 @@ export class UrlService {
       
     }
     
+  }
+  
+  async gotoUrl(url: string, req: Request, res: Response){
+    const foundUrl = await this.urlModel.findFirst({where: {shortUrl: url}});
+    
+    if(!foundUrl) throw new NotFoundException('this URL does not exist', {description: "not found"});
+    
+    return res.redirect(foundUrl.actualUrl);
+    
+    
+  }
+  
+  
+  async updateUrl(updateUrlDto: UpdateUrlDto, shortUrl: string, req: Request, res: Response){
+    const tokenString = (req.headers['authorization'] as string).split(" ")[1];
+    
+    const authToken = await this.helper.authenticateToken(tokenString);
+     
+    if(!authToken) throw new ForbiddenException("forbidden");
+    
+    const updatedUrl = await this.urlModel.update({
+      where: {
+        userId: (authToken as TokenPayload).id,
+        shortUrl
+      },
+      data: {
+        ...updateUrlDto
+      }
+    });
+    
+    
+    if(!updatedUrl) throw new BadRequestException();
+    
+    return res.json({msg: `url successfully updated`, payload: updatedUrl, status: `OK`});
+    
+  }
+  
+  async deleteUrl(shortUrl, req: Request , res: Response){
+    const tokenString = (req.headers["authorization"] as string).split(" ")[1];
+    const authToken = await this.helper.authenticateToken(tokenString);
+    
+    if(!authToken) throw new ForbiddenException("forbidden");
+    try{
+      
+      
+       await this.urlModel.delete({where: {
+        userId: (authToken as TokenPayload).id,
+        shortUrl 
+      }});
+      
+      
+      return res.json({msg: `url sucessfully deleted`, status: `OK`});
+      
+    }catch(err){
+      throw new HttpException('Url not found', HttpStatus.NOT_FOUND)
+    }
+   
   }
 }
