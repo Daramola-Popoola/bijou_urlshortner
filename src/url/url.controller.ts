@@ -1,8 +1,10 @@
 import { Controller, Get, Post, Put, Delete, Body, Req, Res, Param, Query} from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { UrlService } from './url.service';
 import { CreateUrlPartialDto } from './dto/create-url.dto';
 import { UpdateUrlDto } from './dto/update-url.dto';
 
+@ApiTags('URL')
 @Controller('url')
 export class UrlController {
   constructor(private readonly urlService: UrlService) {}

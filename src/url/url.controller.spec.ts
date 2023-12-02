@@ -4,12 +4,12 @@ import { UrlService } from './url.service';
 
 describe('UrlController', () => {
   let controller: UrlController;
-
+  const mockUrlService = {}
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [UrlController],
       providers: [UrlService],
-    }).compile();
+    }).overrideProvider(UrlService).useValue(mockUrlService).compile();
 
     controller = module.get<UrlController>(UrlController);
   });

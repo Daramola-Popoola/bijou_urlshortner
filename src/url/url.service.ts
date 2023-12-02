@@ -1,9 +1,9 @@
 import { ForbiddenException, Injectable, HttpException, HttpStatus, Logger, NotFoundException, BadRequestException } from '@nestjs/common';
 import {Request, Response} from 'express';
 import { CreateUrlPartialDto } from './dto/create-url.dto';
-import { HelperService } from 'src/helper/helper.service';
-import { TokenPayload } from 'src/helper/helper.dto';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { HelperService } from '../helper/helper.service';
+import { TokenPayload } from '../helper/helper.dto';
+import { PrismaService } from '../prisma/prisma.service';
 import { UpdateUrlDto } from './dto/update-url.dto';
 
 @Injectable()

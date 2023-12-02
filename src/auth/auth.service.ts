@@ -1,9 +1,9 @@
 import { BadRequestException, ForbiddenException, HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import {Request, Response} from 'express';
 import { CreateAuthDto, SignInAuthDto } from './dto/create-auth.dto';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { HelperService } from 'src/helper/helper.service';
-import { TokenPayload } from 'src/helper/helper.dto';
+import { PrismaService } from '../prisma/prisma.service';
+import { HelperService } from '..//helper/helper.service';
+import { TokenPayload } from '../helper/helper.dto';
 
 @Injectable()
 export class AuthService {
